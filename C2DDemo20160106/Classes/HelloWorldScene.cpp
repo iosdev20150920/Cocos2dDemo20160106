@@ -62,6 +62,14 @@ bool HelloWorld::init()
 
     // add the label as a child to this layer
     this->addChild(label, 1);
+    
+    ///< 添加一段显示文字
+//    auto textObj = Label::createWithTTF("测试Demo,HelloWorl", "fonts/arial.ttf", 12); ///<中文文字显示乱码
+    auto textObj = Label::createWithSystemFont("测试Demo,HelloWorl", "Helvetica Neue", 12);
+    ///< 设置显示的位置
+    textObj->setPosition(origin.x + visibleSize.width - textObj->getContentSize().width, origin.y + visibleSize.height - textObj->getContentSize().height);
+    ///< 将文本对象添加到层节点
+    this->addChild(textObj, 1);
 
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("HelloWorld.png");
