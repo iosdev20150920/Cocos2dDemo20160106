@@ -2,6 +2,18 @@
 
 USING_NS_CC;
 
+HelloWorld::~HelloWorld()
+{
+    textObj->release();
+    textObj = nullptr;
+    
+    playButton->release();
+    playButton = nullptr;
+    
+    pauseButton->release();
+    pauseButton = nullptr;
+}
+
 Scene* HelloWorld::createScene()
 {
     // 'scene' is an autorelease object
@@ -48,6 +60,9 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
 
+    ///< 添加播放暂停
+    this->addPlayAndPauseButtons();
+    
     /////////////////////////////
     // 3. add your codes below...
 
@@ -64,12 +79,7 @@ bool HelloWorld::init()
     this->addChild(label, 1);
     
     ///< 添加一段显示文字
-//    auto textObj = Label::createWithTTF("测试Demo,HelloWorl", "fonts/arial.ttf", 12); ///<中文文字显示乱码
-    auto textObj = Label::createWithSystemFont("测试Demo,HelloWorl", "Helvetica Neue", 12);
-    ///< 设置显示的位置
-    textObj->setPosition(origin.x + visibleSize.width - textObj->getContentSize().width, origin.y + visibleSize.height - textObj->getContentSize().height);
-    ///< 将文本对象添加到层节点
-    this->addChild(textObj, 1);
+    this->addTextObject();
 
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("HelloWorld.png");
@@ -92,3 +102,61 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     exit(0);
 #endif
 }
+
+void HelloWorld::addTextObject()
+{
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    //    auto textObj = Label::createWithTTF("测试Demo,HelloWorl", "fonts/arial.ttf", 12); ///<中文文字显示乱码
+    auto textObj = Label::createWithSystemFont("测试Demo,HelloWorl", "Helvetica Neue", 12);
+    ///< 设置显示的位置
+    textObj->setPosition(origin.x + visibleSize.width - textObj->getContentSize().width, origin.y + visibleSize.height - textObj->getContentSize().height);
+    ///< 将文本对象添加到层节点
+    this->addChild(textObj, 1);
+    
+    this->textObj = textObj;
+    this->textObj->retain();
+}
+
+///< 添加播放/暂停事件按钮
+void HelloWorld::addPlayAndPauseButtons()
+{
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    // add a "close" icon to exit the progress. it's an autorelease object
+    auto buttonItem = MenuItemImage::create("res/Buttons/btn-play-normal.png", "res/Buttons/btn-play-selected.png", CC_CALLBACK_1(HelloWorld::buttonEventPlayCallback, this));
+    
+    buttonItem->setPosition(Vec2(origin.x + visibleSize.width - buttonItem->getContentSize().width/2 ,
+                                origin.y + buttonItem->getContentSize().height/2 + 50));
+    
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(buttonItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+    
+    this->playButton = menu;
+    this->playButton->retain();
+}
+
+// a play event callback
+void HelloWorld::buttonEventPlayCallback(cocos2d::Ref* pSender)
+{
+    bool bRet = Director::getInstance()->isPaused();
+    if (bRet)
+    {
+        Director::getInstance()->resume();
+    }
+    else
+    {
+        Director::getInstance()->pause();
+    }
+}
+
+// a pause event callback
+void HelloWorld::buttonEventPauseCallback(cocos2d::Ref* pSender)
+{
+    
+}
+
