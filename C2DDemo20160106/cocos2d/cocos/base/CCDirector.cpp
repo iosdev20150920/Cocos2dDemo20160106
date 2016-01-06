@@ -1065,6 +1065,7 @@ void Director::setNextScene()
         _runningScene->onEnterTransitionDidFinish();
 
 #if CC_ENABLE_SCRIPT_BINDING
+        ///< Cocos2d-x的原始代码中，下面的语句是高亮可执行的，但在HelloWorld Demo中运行崩溃，因为需要添加JS脚本，所以暂时注释
 //        ScriptEngineManager::getInstance()->getScriptEngine()->garbageCollect();
 #endif // CC_ENABLE_SCRIPT_BINDING
     }
