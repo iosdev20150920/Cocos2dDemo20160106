@@ -65,6 +65,8 @@ bool HelloWorld::init()
     
     /////////////////////////////
     // 3. add your codes below...
+    
+    this->addLayersObject();
 
     // add a label shows "Hello World"
     // create and initialize a label
@@ -90,9 +92,34 @@ bool HelloWorld::init()
     // add the sprite as a child to this layer
     this->addChild(sprite, 0);
     
+    schedule(schedule_selector(HelloWorld::schedulerUpdate), 1.0f, kRepeatForever, 0);
+    
+    
     return true;
 }
 
+void HelloWorld::schedulerUpdate(float dt)
+{
+    log("调度器——update");
+}
+
+void HelloWorld::addLayersObject()
+{
+//    Color4B(0, 128, 128, 255);
+    auto layer = LayerColor::create(Color4B::BLUE);
+    layer->setContentSize(CCSizeMake(120, 80));
+    layer->setPosition(Point(50, 50));
+    addChild(layer, 10);
+    auto layer1 = LayerColor::create(Color4B::RED);
+    layer1->setContentSize(CCSizeMake(120, 80));
+    layer1->setPosition(Point(100, 80));
+    addChild(layer1, 20);
+    auto layer2 = LayerColor::create(Color4B::GRAY);
+    layer2->setContentSize(CCSizeMake(120, 80));
+//    layer2->setPosition(Point(150, 110));
+    layer2->setPosition(Point(250, 150));
+    addChild(layer2, -10);
+}
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
 {
